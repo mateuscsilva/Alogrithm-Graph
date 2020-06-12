@@ -13,6 +13,9 @@ struct edge{
 struct vertex{
 	int id;
 	int father = -1;
-	bool visit = false;
+	int color = -1;
+	int time = -1;
+	int distance = -1;
+	int visit = 0;
 	vector<edge> adj;
 };

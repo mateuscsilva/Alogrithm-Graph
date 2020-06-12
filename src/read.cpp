@@ -1,4 +1,5 @@
 void read_instance(char *filename, bool directed_graph, bool weighted_graph, vector<vertex> &allVertex){
+	cout<<"Begin - read\n";
 	ifstream file;
 	file.open(filename);
 
@@ -38,5 +39,5 @@ void read_instance(char *filename, bool directed_graph, bool weighted_graph, vec
 		}
 
 	}
-   
+   	cout<<"End - read\n";
 }

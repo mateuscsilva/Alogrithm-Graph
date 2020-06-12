@@ -2,8 +2,10 @@
 #include <fstream>
 #include <vector>
 #include <queue>
+#include <list>
 #include <sstream>
 #include <utility>
+#include <climits>
 #include <string.h>
 #include "../str/structs.h"
 #include "../str/utils.h"
@@ -12,8 +14,10 @@ using namespace std;
 
 int main(int argc, char* argv[]){
 	vector<vertex> allVertex;
-	char *filename_code = "dfs";
-	char *filename_instance = "../instance/instance_example.txt";
+	// string default_filename_code = "dfs"; 
+	// string default_filename_instance = "../instance/instance_example.txt";
+	char *filename_code;
+	char *filename_instance;
 	bool directed_graph = false;
 	bool weigheted_graph = false;
 	for(int i=0; i<argc; i++){
@@ -23,7 +27,7 @@ int main(int argc, char* argv[]){
 		}else if(strcmp(argv[i],"--instance") == 0){
 			filename_instance = argv[i+1];
 			i++;
-		}else if(strcmp(argv[i],"--direct") == 0){
+		}else if(strcmp(argv[i],"--directed") == 0){
 			directed_graph = atoi(argv[i+1]); //0->false | 1->true
 			i++;
 		}else if(strcmp(argv[i],"--weight") == 0){
@@ -31,7 +35,6 @@ int main(int argc, char* argv[]){
 			i++;
 		}
 	}
-
 	read_instance(filename_instance, directed_graph, weigheted_graph, allVertex);
 	chooseAlgorithm(filename_code, allVertex);
 }
