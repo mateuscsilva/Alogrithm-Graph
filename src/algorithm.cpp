@@ -143,6 +143,69 @@ void topologicalSort(vector<vertex> &allVertex){
 	cout<<endl;
 }
 
+bool compare_edge(edge a, edge b){
+	return a.weight < b.weight;
+}
+
+vertex Makeset(vertex v){
+	v.height = 0;
+	v.father = v.id;
+	return v;
+}
+
+vertex Findset(vertex v, vector<vertex> &allVertex){
+	if(v.father != v.id){
+		v = Findset(allVertex[v.father], allVertex);
+	}
+	return v;
+}
+
+void Link(vertex x, vertex y, vector<vertex> &allVertex){
+	if(allVertex[x.id].height > allVertex[y.id].height){
+		allVertex[y.id].father = allVertex[x.id].father;
+	}else {
+		allVertex[x.id].father=allVertex[y.id].father;
+		if(allVertex[y.id].height==allVertex[x.id].height){
+			allVertex[y.id].height++;	
+		}
+	}
+}
+
+void Union(vertex x, vertex y, vector<vertex> &allVertex){
+	Link(Findset(allVertex[x.id], allVertex), Findset(allVertex[y.id], allVertex), allVertex);
+} 
+
+void minimumSpanningTreeKruskal(vector<vertex> &allVertex){
+	int totalSum = 0;
+	vector<edge> adj;
+	vertex vTemp1, vTemp2;
+	for(int i = 0; i < allVertex.size(); i++){
+		vertex v;
+		v.id = i;
+		v = Makeset(v);
+		allVertex[i] = v;
+		for(int j = 0; j < allVertex[i].adj.size(); j++){
+			adj.push_back(allVertex[i].adj[j]);	
+		}
+	}
+
+	sort(adj.begin(), adj.end(), compare_edge);
+	
+	for(int i = 0; i < adj.size(); i++){
+		edge e = adj[i];
+		vTemp1 = Findset(allVertex[e.adj_vertex.first], allVertex);
+		allVertex[e.adj_vertex.first].father = vTemp1.father;
+		vTemp2 = Findset(allVertex[e.adj_vertex.second], allVertex);
+		allVertex[e.adj_vertex.second].father = vTemp2.father;
+
+		if(allVertex[e.adj_vertex.first].father != allVertex[e.adj_vertex.second].father){
+			Union(allVertex[e.adj_vertex.first], allVertex[e.adj_vertex.second], allVertex);
+			totalSum += e.weight;
+		}
+	}
+	cout<<"Tree weight = "<<totalSum<<endl;
+}
+
 void chooseAlgorithm(char *code, vector<vertex> &allVertex){
 	cout<<"Begin - "<<code<<endl;
 	if(strcmp(code, "dfs") == 0){
@@ -155,6 +218,8 @@ void chooseAlgorithm(char *code, vector<vertex> &allVertex){
 		connectGraph(allVertex);
 	}else if(strcmp(code, "topological-sort") == 0){
 		topologicalSort(allVertex); //Graph should be directed
+	}else if(strcmp(code, "kruskal") == 0){
+		minimumSpanningTreeKruskal(allVertex);
 	}
 	cout<<"End - "<<code<<endl;
 }
